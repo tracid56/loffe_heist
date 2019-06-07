@@ -104,42 +104,42 @@ Citizen.CreateThread(function()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(0)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(1)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(2)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(3)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(4)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(5)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(6)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
 
         PushScaleformMovieFunction(scaleform, "SET_COLUMN_SPEED")
         PushScaleformMovieFunctionParameterInt(7)
-        PushScaleformMovieFunctionParameterInt(math.random(45,55))
+        PushScaleformMovieFunctionParameterInt(math.random(150,255))
         PopScaleformMovieFunctionVoid()
         
 
@@ -212,7 +212,7 @@ Citizen.CreateThread(function()
                     PushScaleformMovieFunctionParameterBool(true)
                     ScaleformLabel("WINBRUTE")
                     PopScaleformMovieFunctionVoid()
-                    Wait(5000)
+                    Wait(0)
                     PushScaleformMovieFunction(scaleform, "CLOSE_APP")
                     PopScaleformMovieFunctionVoid()
                     Hacking = false
@@ -252,6 +252,8 @@ Citizen.CreateThread(function()
                     end
                 end
             end
+        else
+            Wait(250)
         end
     end
 end)
@@ -529,6 +531,8 @@ Citizen.CreateThread(function()
             if GetDistanceBetweenCoords(coords, v.Money.BoxPosition, true) <= 2.0 then
                 local position = v.Money.BoxPosition
                 DrawText3D(position.x, position.y, position.z + 0.5 , '~g~'.. v.Money.Amount .. ':-', 0.8)
+            else
+                Wait(250)
             end
         end
         Wait(0)
@@ -538,7 +542,6 @@ end)
 local state = 0
 local inMission = false
 local ped = {}
-local cinema = false
 local currentDrillAnim = 'drill_straight_idle'
 
 RegisterNetEvent('loffe_heist:getTimeCl')
@@ -615,21 +618,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        for i = 1, #Config.BankRobbery do
-            Wait(0)
-            for j = 1, #Config.BankRobbery[i].Doors do
-                local d = Config.BankRobbery[i].Doors[j]
-                local player = PlayerPedId()
-                local coords = GetEntityCoords(player)
-                
-            end
-        end
-    end
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        Wait(0)
+        Wait(250)
         for i = 1, #Config.BankRobbery do
             local v = Config.BankRobbery[i]
             for j = 1, #v.Doors do
@@ -779,7 +768,6 @@ Citizen.CreateThread(function()
                                 if police >= Config.BankRobbery[i].Cops then
                                     TriggerServerEvent('loffe_heist:toggleSafe', i, j, true)
                                     FreezeEntityPosition(player, true)
-                                    cinema = true
                                     SetPedCurrentWeaponVisible(player, false, true, 0, 0)
                                     SetEntityCoords(player, s.Coords)
                                     SetEntityHeading(player, s.Heading)
@@ -905,7 +893,6 @@ Citizen.CreateThread(function()
                                     Wait(100)
 
                                     DeleteEntity(drillEntity)
-                                    cinema = false
                                     FreezeEntityPosition(player, false)
 
                                     Wait(100)
@@ -945,7 +932,7 @@ end
 Citizen.CreateThread(function()
     while true do
         while drilling do
-            local text = '\n\n\n~INPUT_CELLPHONE_UP~ Borra \n~INPUT_CELLPHONE_DOWN~ Ta ut borren\n~INPUT_JUMP~ Sluta borra'
+            local text = '~INPUT_CELLPHONE_UP~ Borra \n~INPUT_CELLPHONE_DOWN~ Ta ut borren\n~INPUT_JUMP~ Sluta borra'
 			AddTextEntry("loffe_heist_drill_info_text", text)
 			DisplayHelpTextThisFrame("loffe_heist_drill_info_text", false)
 
@@ -1000,44 +987,75 @@ end)
 
 Citizen.CreateThread(function()
     while true do -- hei_prop_heist_drill anim@heists@fleeca_bank@drilling
-        Citizen.Wait(0)
+        Wait(750)
         if drilling then
-            if IsDisabledControlPressed(0, 172) and not finishedDrilling then
-                if temperature < 1.0 then
-                    RequestAnimDict('anim@heists@fleeca_bank@drilling')
-                    while not HasAnimDictLoaded('anim@heists@fleeca_bank@drilling') do
-                        Wait(10)
-                    end
-                    TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_start', 8.0, 8.0, -1, 17, 1, false, false, false)
-                    --PlaySoundFrontend(-1, "Drill_Pin_Break", "DLC_HEIST_FLEECA_SOUNDSET", 1)
-                    while IsDisabledControlPressed(0, 172) and temperature < 1.0 do
-                        drilling = true
-                        if speed < 0.7 then
-                            speed = speed + (math.random(1, 5)/100)
+            while drilling do
+                Wait(0)
+                if IsDisabledControlPressed(0, 172) and not finishedDrilling then
+                    if temperature < 1.0 then
+                        RequestAnimDict('anim@heists@fleeca_bank@drilling')
+                        while not HasAnimDictLoaded('anim@heists@fleeca_bank@drilling') do
+                            Wait(10)
                         end
-                        if depth-position >= 0 then
-                            position = position + ((math.random(1, 5)/1000)+(speed/10))
-                            currentDrillAnim = 'drill_straight_idle'
+                        TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_start', 8.0, 8.0, -1, 17, 1, false, false, false)
+                        --PlaySoundFrontend(-1, "Drill_Pin_Break", "DLC_HEIST_FLEECA_SOUNDSET", 1)
+                        while IsDisabledControlPressed(0, 172) and temperature < 1.0 do
+                            drilling = true
+                            if speed < 0.7 then
+                                speed = speed + (math.random(1, 5)/100)
+                            end
+                            if depth-position >= 0 then
+                                position = position + ((math.random(1, 5)/1000)+(speed/10))
+                                currentDrillAnim = 'drill_straight_idle'
+                                playSound = false
+                            else
+                                local randomDepth = math.random(1, 5)/1000
+                                depth = depth + randomDepth
+                                position = position + randomDepth
+                                temperature = temperature + 0.02
+                                playSound = true
+
+                                currentDrillAnim = 'drill_straight_start'
+
+                                local c = GetEntityCoords(drillEntity)
+                            end
+                            if depth >= 0.9 then
+                                drilling = false
+                                finishedDrilling = true
+                                break
+                            end
+                            Wait(100)
+                        end
+                        if temperature >= 1.0 then
                             playSound = false
-                        else
-                            local randomDepth = math.random(1, 5)/1000
-                            depth = depth + randomDepth
-                            position = position + randomDepth
-                            temperature = temperature + 0.02
-                            playSound = true
-
-                            currentDrillAnim = 'drill_straight_start'
-
                             local c = GetEntityCoords(drillEntity)
+                            RequestNamedPtfxAsset("core")
+                            while not HasNamedPtfxAssetLoaded("core") do
+                                Wait(0)
+                            end
+                            UseParticleFxAssetNextCall("core")
+                            particleLooped = StartParticleFxLoopedAtCoord("ent_amb_exhaust_thick", c, 0.0, 0.0, 0.0, 0.5, false, false, false, 0)
+                            SetParticleFxLoopedEvolution(particleLooped, "ent_amb_exhaust_thick", 0.5, 0)
+
+                            for i = 1, 100 do
+                                if speed > 0 then
+                                    speed = speed - 0.01
+                                end
+                                if temperature > 0 then
+                                    temperature = temperature - 0.01
+                                end
+                                if position > 0 then
+                                    position = position - 0.01
+                                end
+                                if temperature <= 0.2 then
+                                    break   
+                                end
+                                Wait(250)
+                            end
+                            playSound = true
+                            TriggerEvent('loffe_heist:particleTimer', 750)
                         end
-                        if depth >= 0.9 then
-                            drilling = false
-                            finishedDrilling = true
-                            break
-                        end
-                        Wait(100)
-                    end
-                    if temperature >= 1.0 then
+                    else
                         playSound = false
                         local c = GetEntityCoords(drillEntity)
                         RequestNamedPtfxAsset("core")
@@ -1047,7 +1065,6 @@ Citizen.CreateThread(function()
                         UseParticleFxAssetNextCall("core")
                         particleLooped = StartParticleFxLoopedAtCoord("ent_amb_exhaust_thick", c, 0.0, 0.0, 0.0, 0.5, false, false, false, 0)
                         SetParticleFxLoopedEvolution(particleLooped, "ent_amb_exhaust_thick", 0.5, 0)
-
                         for i = 1, 100 do
                             if speed > 0 then
                                 speed = speed - 0.01
@@ -1056,7 +1073,7 @@ Citizen.CreateThread(function()
                                 temperature = temperature - 0.01
                             end
                             if position > 0 then
-                                position = position - 0.01
+                                position = position - 0.005
                             end
                             if temperature <= 0.2 then
                                 break   
@@ -1066,48 +1083,21 @@ Citizen.CreateThread(function()
                         playSound = true
                         TriggerEvent('loffe_heist:particleTimer', 750)
                     end
-                else
+                elseif IsDisabledControlPressed(0, 173) then
                     playSound = false
-                    local c = GetEntityCoords(drillEntity)
-                    RequestNamedPtfxAsset("core")
-                    while not HasNamedPtfxAssetLoaded("core") do
-                        Wait(0)
-                    end
-                    UseParticleFxAssetNextCall("core")
-                    particleLooped = StartParticleFxLoopedAtCoord("ent_amb_exhaust_thick", c, 0.0, 0.0, 0.0, 0.5, false, false, false, 0)
-                    SetParticleFxLoopedEvolution(particleLooped, "ent_amb_exhaust_thick", 0.5, 0)
-                    for i = 1, 100 do
-                        if speed > 0 then
-                            speed = speed - 0.01
-                        end
-                        if temperature > 0 then
-                            temperature = temperature - 0.01
-                        end
-                        if position > 0 then
-                            position = position - 0.005
-                        end
-                        if temperature <= 0.2 then
-                            break   
-                        end
-                        Wait(250)
-                    end
-                    playSound = true
-                    TriggerEvent('loffe_heist:particleTimer', 750)
-                end
-            elseif IsDisabledControlPressed(0, 173) then
-                playSound = false
-                position = position - 0.015
-                temperature = temperature - 0.015
-                speed = speed - 0.015
-                Wait(50)
-            else
-                if speed > 0.0 then
-                    speed = speed - 0.01
+                    position = position - 0.015
+                    temperature = temperature - 0.015
+                    speed = speed - 0.015
                     Wait(50)
-                end
-                if temperature > 0.0 then
-                    temperature = temperature - 0.01
-                    Wait(50)
+                else
+                    if speed > 0.0 then
+                        speed = speed - 0.01
+                        Wait(50)
+                    end
+                    if temperature > 0.0 then
+                        temperature = temperature - 0.01
+                        Wait(50)
+                    end
                 end
             end
         end
@@ -1156,45 +1146,6 @@ Citizen.CreateThread(function()
     end
 end)
 
---[[Citizen.CreateThread(function()
-    local drill_hash = GetHashKey("hei_prop_heist_drill")
-    RequestModel(drill_hash)
-    while not HasModelLoaded(drill_hash) do
-        Wait(0)
-    end
-    local drill = CreateObject(drill_hash, Config.DrillSpawns[#Config.DrillSpawns], false, false)
-    SetEntityAsMissionEntity(drill, true, true)
-    while true do
-        Wait(0)
-        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), GetEntityCoords(drill)) <= 2.0 then
-            BeginTextCommandDisplayHelp('STRING')
-            AddTextComponentSubstringPlayerName('~INPUT_CONTEXT~ Plocka upp ~g~borr')
-            EndTextCommandDisplayHelp(0, false, true, -1)
-            if IsControlJustReleased(0, 38) then
-                RequestAnimDict('pickup_object')
-                while not HasAnimDictLoaded('pickup_object') do
-                    Wait(10)
-                end
-                TaskGoStraightToCoord(PlayerPedId(), GetEntityCoords(drill), 1.0, 1.0, 0.0, 0.0)
-                Wait(1000)
-                ClearPedTasksImmediately(PlayerPedId())
-                TaskPlayAnim(PlayerPedId(), 'pickup_object', 'pickup_low', 500.0, 500.0, -1, 50, 0, false, false, false)
-
-                local boneIndex = GetPedBoneIndex(PlayerPedId(), 57005)
-                Wait(500)
-                AttachEntityToEntity(drill, PlayerPedId(), boneIndex, 0.12, 0.028, 0.001, 10.0, 175.0, 0.0, true, true, false, true, 1, true)
-                                
-                Wait(1500)
-                ClearPedTasks(PlayerPedId())
-                DeleteEntity(drill)
-                break
-            end
-        end
-    end
-end)]]
-
-
-
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 	SetTextFont(font)
 	SetTextProportional(0)
@@ -1222,64 +1173,26 @@ end
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
-        if cinema then
-            TriggerEvent('esx_voice:toggle', false)
-		    TriggerEvent('esx_status:setDisplay', 0.0)
-            local hasActivated = false
-            local waitedMS = 0.00
-            while not hasActivated do
-                Wait(5)
-                waitedMS = waitedMS + 0.001
-                    Cinematic(-0.08+waitedMS)
-                    Cinematic(1.08-waitedMS)
-                if waitedMS > 0.105 then
-                    hasActivated = true
-                end
-            end
-			while cinema do
-				Wait(5)
-				DrawRect(0.5, 0.025, 1.0, 0.15, 0, 0, 0, 255)
-				DrawRect(0.5, 0.975, 1.0, 0.15, 0, 0, 0, 255)
-            end
-            while hasActivated do
-                Wait(5)
-                waitedMS = waitedMS - 0.001
-                    Cinematic(-0.08+waitedMS)
-                    Cinematic(1.08-waitedMS)
-                if waitedMS < 0 then
-                    hasActivated = false
-                end
-            end
-            TriggerEvent('esx_voice:toggle', true)
-		    TriggerEvent('esx_status:setDisplay', 1.0)
-		end
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Wait(5)
+		Wait(250)
 		if ESX.GetPlayerData().job.name == "police" then
 			for i = 1, #Config.BankRobbery do
 				if not Config.BankRobbery[i].Doors[#Config.BankRobbery[i].Doors].Frozen then
-					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), Config.BankRobbery[i].Doors[#Config.BankRobbery[i].Doors].Coords) <= 5 then
-						TriggerEvent('loffe_heist:helpTimed', '~INPUT_CONTEXT~ Stäng dörren', 25)
-						if IsControlJustReleased(0, 38) then
-							TriggerServerEvent('loffe_heist:setDoorFreezeStatus', i, #Config.BankRobbery[i].Doors, true)
-						end
+                    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), Config.BankRobbery[i].Doors[#Config.BankRobbery[i].Doors].Coords) <= 5 then
+                        while GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), Config.BankRobbery[i].Doors[#Config.BankRobbery[i].Doors].Coords) <= 5 do
+                            TriggerEvent('loffe_heist:helpTimed', '~INPUT_CONTEXT~ Stäng dörren', 25)
+                            if IsControlJustReleased(0, 38) then
+                                TriggerServerEvent('loffe_heist:setDoorFreezeStatus', i, #Config.BankRobbery[i].Doors, true)
+                            end
+                            Wait(5)
+                        end
 					end
 				end
 			end
 		else
-			Wait(250)
+			Wait(2500)
 		end
 	end
 end)
-
-function Cinematic(x)
-    DrawRect(0.5, x, 1.0, 0.15, 0, 0, 0, 255)
-end
 
 function DrawText3D(x, y, z, text, scale)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
